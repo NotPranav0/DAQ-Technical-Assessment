@@ -1,8 +1,66 @@
-Use this file to write your answer to Stage 2 of the firmware tasks.
-
 CAN
 Q1:
 
+Advantages
+- Robustness & Error Handling: More reliable in harsh environments than simpler protocols like SPI or I2C due to differential signals and CRC.  
+- Multi-Master & Arbitration: Unlike USB (host-centric), CAN allows every node to initiate communication without corrupting data.  
+- Long-Distance: PCIe and SPI are usually short-range; CAN extends across vehicles or industrial plants effectively.  
+- Deterministic Latency: Great for real-time control, unlike USB’s host polling model or I2C’s slower speeds.
+
+Disadvantages
+- Lower Data Rates: Can’t match USB 3.x or PCIe for bandwidth-intensive applications. Even SPI can run faster on short PCB traces.  
+- Small Payloads: CAN restricts frames to 8 bytes, while USB and PCIe can transfer large packets easily.  
+- Complex: While CAN is certainly less complex than USB or PCIe, SPI/I2C are more straightforward and cheaper than CAN if you only have a few short-distance sensors.  
+
 Q2:
 
+Embedded Systems pressumable have multiple microcontrollers distributed around the vehicle which require robust, real-time communication over longer distances. CAN offers a multi-master bus with differential signaling and built-in error handling, ensuring reliable operation in a harsh racing environment. SPI/I2C are fine for short on-board links but scale poorly to multi-node vehicle networks, while USB is host-centric and not ideal for peer-to-peer embedded control.
+
+The powertrain environment has inductive loads and high electromagnetic interference, requiring a noise-immune communication system. Its differential signaling and CRC-based error detection effectively mitigate noise, ensuring stable data exchange among sensors and actuators.SPI and I2C have no robust noise-handling or retransmission mechanisms, and USB/PCIe are not typically designed for severe automotive EMI.
+
+The DAQ department have a large numbers of sensors distributed across the vehicle which demand moderate-to-high bandwidth with dependable data integrity. CAN provides the neccessary throughput while preserving the robust error detection and correction essential for race telemetry. SPI/I2C are short-range without automatic error-handling, USB is host-driven (less flexible for multi-node setups), and PCIe is overkill in cost/complexity for typical sensor data.
+
+The AV pressumably have safety-critical control loops and sensor fusion which require deterministic real-time communication with priority-based message handling. CAN's hardware-level arbitration ensures urgent messages (e.g., fault alerts) preempt lower-priority data for guaranteed response times. USB relies on host polling, SPI is single-master, and PCIe’s high-speed point-to-point architecture lacks simple broadcast-based priority arbitration.
+
 STM32 Chip Selection
+
+Using the filters on the STM product selector, there are 21 chips that meet the given requirements
+I've narrowed down the selection by filtering for the following criteria:
+- Maximum Operating Temperature: Highest available at 105°C. There are chips rated for 85°C, but a higher maximum rating is probably more suitable for automotive applications.
+- Package: LQFP (Assuming the board is hand-soldered). There are also BGA, but LQFP is more DIY-friendly.
+- Numer of SPI interfaces: Highest available at 6. This is to ensure there are enough SPI interfaces for the sensors and actuators.
+
+This narrows it down to 3 chips, the differences between them are:
+|             |         |                |                      |               |                             |          |        |
+|-------------|---------|----------------|----------------------|---------------|-----------------------------|----------|--------|
+| STM32F76511 | 140 I/O |                |                      |               | Additonal Security Features | In Stock | $20.64 |
+| STM32F765Zl | 114 I/O |                | Graphics Accelerator |               | Additonal Security Features | In Stock | $20.10 |
+| STM32F77711 | 140 I/O | TFT Controller |                      | Crypto Engine | /                           |          | $26.03 |
+
+
+I would pick the STM32F76511 for its extra I/O pins and lower price compared to the STM32F77711. 
+The graphics accelerator and TFT controller on the other chips are not necessary for the given application,
+and the crypto engine is likely overkill for a racing vehicle. 
+The additional security features are a nice bonus, but not probably not critical for this use case. 
+
+https://estore.st.com/en/stm32f765iit7-cpn.html
+ 
+Dimensions:
+LQFP footpint, 176 pins, 24x24mm, 0.5mm pitch
+
+Power Consumption:
+Maximum ratings:
+- V_dd = 4V
+- I_dd = 420mA
+Theoretical maximum power consumption:
+- P = V_dd * I_dd = 4V * 420mA = 1.68W
+
+Not a realistic value, as it assumes all pins are sourcing/sinking current at their maximum ratings.
+STM does provide comprehensive typical power consumption values in the datasheet.
+
+Assuming a nominal operating voltage of 3.3V, an operting temperature of 85°C,
+and a scenario where all peripherals are active and the CPU is running at its maximum clock speed,
+with code running from flash memory and 20 I/O pins toggling at 8Mhz, with a high capacitance load (33pF),
+the current consumption is estimated to be around 312mA.
+- P = V_dd * I_dd = 3.3V * 312mA = 1.03W
+(page 120 and page 128 of the datasheet)
