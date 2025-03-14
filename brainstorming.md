@@ -30,7 +30,7 @@ got a basic log file parser done to extract timestamp, interface, id and payload
 plan:
 - parse all 3 dbc files into dbc objects 
     - create a map between messageIds and message objects for each dbc file
-- create a vector that maps interfaces to dbc objects
+- create a map that maps interfaces to dbc objects
 - process each line of the log file
     - extract time,interface,id,payload
 - obtain dbc object from interface
@@ -38,6 +38,16 @@ plan:
 - convert payload to human readable format
 - bundle output into an object (probably useful when testing)
 - write output to file 
+
+notes on above plan:
+- worked pre well
+- had a minor issue where the progam would seg fault because i didnt handle the case where the payload was empty. glad i setup debugging, was able to resolve it quickly
+
+future plan:
+- refactor a bit
+    - lots of nested loops/conditions
+    - will probably need to resolve more objects to make the main function cleaner
+- add tests
 
 ## Spyder
 
