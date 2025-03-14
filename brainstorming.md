@@ -26,6 +26,19 @@ i had two ideas in mind to parse the log file
 i figure the regex approach would be more robust and less LOC, but i dont know enough regex to write the pattern my self, so i used chatgpt to come up with the regex pattern.
 
 got a basic log file parser done to extract timestamp, interface, id and payload.
+
+plan:
+- parse all 3 dbc files into dbc objects 
+    - create a map between messageIds and message objects for each dbc file
+- create a vector that maps interfaces to dbc objects
+- process each line of the log file
+    - extract time,interface,id,payload
+- obtain dbc object from interface
+- obtain signal object from id 
+- convert payload to human readable format
+- bundle output into an object (probably useful when testing)
+- write output to file 
+
 ## Spyder
 
 ## Cloud
