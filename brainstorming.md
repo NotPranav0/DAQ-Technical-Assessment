@@ -13,14 +13,19 @@ then setup project enviroment
 then start work on the actual tasks
 
 read through the dbcppp examples to figure out how to extract messages from dbc files
-got a basic scipt working to parse a given dbc file and print all the signals to console]
+got a basic scipt working to parse a given dbc file and print all the signals to console
 
 given a can id and can interface, i can loop through message ids to find the right message (might be faster to preproccess a map rather than iterating everytime)
 then using the signal.decode() and signal.RawtoPhys() i can convert the payload to human readable format
 
 need to figure out how to parse the log file and then i can implement the above ^
 
+i had two ideas in mind to parse the log file
+1. split each line on a space, and then split the id#payload by a #
+2. use regex to split each line
+i figure the regex approach would be more robust and less LOC, but i dont know enough regex to write the pattern my self, so i used chatgpt to come up with the regex pattern.
 
+got a basic log file parser done to extract timestamp, interface, id and payload.
 ## Spyder
 
 ## Cloud
