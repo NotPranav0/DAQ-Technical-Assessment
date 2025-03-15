@@ -62,7 +62,7 @@ future plan:
 ### Build Instructions
 Inside the firmware directory:
 #### Create build dir and cd into it
-> mkdir build && cd build
+> cd firmware && mkdir build && cd build
 #### Configure Cmake
 > cmake ..
 #### Build all targets
