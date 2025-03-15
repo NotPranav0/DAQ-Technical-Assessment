@@ -49,6 +49,14 @@ future plan:
     - will probably need to resolve more objects to make the main function cleaner
 - add tests
 
+
+- had to split main and my solution into a seperate lib and exec so that the test could include them
+- added some extra methods to store attributes of parsed dbc files and log files to use for testing
+- added tests for
+    - verifying log files are parsed correctly with the correct timestamp, interface, can id and payload
+    - verfies the attributes of signals in dbc files by asserting the stored attributes (name, start/stop bits, size, endianess, factor, offset, min/max and units) are correct
+    - ensures invalid log entries are gracefully skipped
+
 ## Spyder
 
 ## Cloud
