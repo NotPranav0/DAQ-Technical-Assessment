@@ -1,0 +1,7 @@
+VERSION "TestDBC1"
+NS_ :
+BS_:
+BU_: ECU
+
+BO_ 256 TestMessage: 8 ECU
+ SG_ Speed : 0|16@1+ (0.1,0) [0|250] "km/h" ECU
