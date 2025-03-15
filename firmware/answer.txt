@@ -55,6 +55,10 @@ Maximum ratings:
 Theoretical maximum power consumption:
 - P = V_dd * I_dd = 4V * 420mA = 1.68W
 
+Minimum ratings:
+- V_dd = 1.7V, however this restricts the maximum clock speed to 180Mhz as well as some other limitations.
+(page 111 of the datasheet)
+
 Not a realistic value, as it assumes all pins are sourcing/sinking current at their maximum ratings.
 STM does provide comprehensive typical power consumption values in the datasheet.
 
