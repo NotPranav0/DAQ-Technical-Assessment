@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 
 project(solution)
 
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Manually specify dbcppp's include and library directories
 include_directories(/usr/local/include/dbcppp)
 link_directories(/usr/local/lib)
@@ -19,10 +15,13 @@ else()
     message(FATAL_ERROR "dbcppp library not found!")
 endif()
 
-# Create the executable and link dbcppp
-add_executable(answer main.cpp)
-target_link_libraries(answer PRIVATE ${DBCPPP_LIB})
+# Build the core solution as a library.
+add_library(solutionLib solution.cpp)
+target_link_libraries(solutionLib PRIVATE ${DBCPPP_LIB})
 
+# Build the main executable.
+add_executable(answer main.cpp)
+target_link_libraries(answer PRIVATE solutionLib)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
